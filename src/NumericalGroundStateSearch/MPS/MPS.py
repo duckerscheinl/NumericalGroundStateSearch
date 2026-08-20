@@ -23,7 +23,7 @@ All indices are 0-based.
 
 import numpy as np
 
-from .svd_utils import svd_trunc
+from ..svd_utils import svd_trunc
 
 PHYS_DIM = 2
 

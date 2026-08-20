@@ -1,5 +1,5 @@
 import numpy as np
-from NumericalGroundStateSearch.MPS import random_MPS, spinup_MPS, spindown_MPS, spinplus_MPS, bond_to_hilbert
+from NumericalGroundStateSearch.MPS.MPS import random_MPS, spinup_MPS, spindown_MPS, spinplus_MPS, bond_to_hilbert
 
 PHYS_DIM = 2
 
