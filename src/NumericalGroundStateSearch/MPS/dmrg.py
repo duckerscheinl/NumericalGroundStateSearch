@@ -124,7 +124,7 @@ def ds_ltr_update(i, phi, ev0, d_vi, d_vip2, m, N):
 
 
 def ds_rtl_update(i, phi, ev0, d_vim1, d_vip1, m, N):
-    m_eff = np.min([2*d_vim1,m+i,m-i+N-2, 2*d_vip1])
+    m_eff = np.min([2*d_vim1,m+i-1,m-i+N-1, 2*d_vip1])
     theta_m = np.reshape(ev0, (d_vim1*2, 2*d_vip1))
     U,S,V = svd_trunc(theta_m, chi_max=m_eff)
     Ti = np.reshape(np.diag(S)@V, (m_eff, 2, d_vip1))

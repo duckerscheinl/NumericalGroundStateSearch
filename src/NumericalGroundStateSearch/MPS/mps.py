@@ -138,6 +138,7 @@ class MPS:
         self.Vs[i - 1] = V
 
     def update_T(self, i, T):
+        assert np.abs(np.linalg.norm(T) - 1) < 1e-12 
         self.Ts[i] = T
 
     # --- local observables -------------------------------------------------
