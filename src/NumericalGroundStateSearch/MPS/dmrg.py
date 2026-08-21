@@ -14,6 +14,16 @@ def groundstate_dense(H):
     return ew[0], ev[:,0]
 
 
+def lowest_energy_subspace(H):
+    ew, ev = np.linalg.eigh(H)
+    idx = np.argsort(ew)
+    ev = ev[:,idx]
+    ew = ew[idx]
+    idx_gs = (ew == ew[0])
+    gsp_dim = np.sum(idx_gs)    # gsp is short for groundspace, which is short for lowest energy subspace.
+    return ew[0], ev[:,0:gsp_dim], gsp_dim
+
+
 def next_rBlock(rB, Vi, Vip1, O1, O2):
     O1part = right_contraction([Vi], O1)
     O2part = right_contraction([Vi,Vip1],O2) 
