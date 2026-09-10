@@ -1,6 +1,6 @@
 import numpy as np
 from .mps_utils import right_contraction, left_contraction, eff_1s_opm_sc
-from ..svd_utils import svd_trunc
+from ..numpy_extensions import svd_trunc
 from .mps import random_MPS, MPS
 
 

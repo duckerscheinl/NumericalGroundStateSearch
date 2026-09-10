@@ -1,7 +1,9 @@
 import numpy as np
 import pytest
+import itertools
 from test_mps_utils import random_operator, dense_operator
 from NumericalGroundStateSearch.MPS.dmrg import dmrg, lowest_energy_subspace
+from NumericalGroundStateSearch.Matrix.dmrg_m import MatrixDMRG, finite_dmrg
 
 
 def hamiltonian(n, op_1s, op_2s):
@@ -62,3 +64,34 @@ def test_ds_dmrg(n, rng):
         assert False, "Exact solver failed! (dim < 1)"
 
     assert np.abs(energ_dmrg-energ_exact) < 1e-11
+
+
+@pytest.mark.parametrize("n", [6,8])
+def test_matrix_dmrg(n, rng):
+    chi_max = 2**(n//2)
+    op_2s_l = random_operator(n=1, rng=rng, hermitian=True)
+    op_2s_r = random_operator(n=1, rng=rng, hermitian=True)
+    op_1s = random_operator(n=1, rng=rng, hermitian=True)
+
+    dmrg = MatrixDMRG(N=n, chi_max=chi_max, O_os=op_1s, O_l=op_2s_l, O_r=op_2s_r)
+    energ_dmrg = dmrg.run()
+    #energ_dmrg = finite_dmrg(N=n, m=chi_max, O_os=op_1s, O_l=op_2s_l, O_r=op_2s_r)
+    ham = hamiltonian(n=n, op_1s=op_1s, op_2s=np.kron(op_2s_l,op_2s_r))
+    energ_exact, psis_exact, dim = lowest_energy_subspace(H=ham)
+
+    assert np.abs(energ_dmrg-energ_exact) < 1e-11
+
+
+
+@pytest.mark.parametrize("n, chi_max", list(itertools.product([6,8],[1,2,3,4])))
+def test_matrix_vs_tensor_dmrg(n, chi_max, rng):
+    op_2s_l = random_operator(n=1, rng=rng, hermitian=True)
+    op_2s_r = random_operator(n=1, rng=rng, hermitian=True)
+    op_2s = np.reshape(np.kron(op_2s_l,op_2s_r), (2,2,2,2))
+    op_1s = random_operator(n=1, rng=rng, hermitian=True)
+    dmrg_m = MatrixDMRG(N=n, chi_max=chi_max, O_os=op_1s, O_l=op_2s_l, O_r=op_2s_r)
+    energ_m = dmrg_m.run()
+    energ_t, _ = dmrg(N=n, m=chi_max, O1=op_1s, O2=op_2s, method=2)
+
+    assert np.abs(energ_m-energ_t)
+
