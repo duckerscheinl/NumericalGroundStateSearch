@@ -3,7 +3,7 @@ import pytest
 import itertools
 from test_mps_utils import random_operator, dense_operator
 from NumericalGroundStateSearch.MPS.dmrg import dmrg, lowest_energy_subspace
-from NumericalGroundStateSearch.Matrix.dmrg_m import MatrixDMRG, finite_dmrg
+from NumericalGroundStateSearch.Matrix.dmrg_m import MatrixDMRG
 
 
 def hamiltonian(n, op_1s, op_2s):
